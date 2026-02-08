@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import OpportunityGraph from '../components/OpportunityGraph';
 import ComparisonView from '../components/ComparisonView';
+import SimulationWizard from '../components/Simulation/SimulationWizard';
 // import axios from 'axios';
 
 const Dashboard = () => {
@@ -264,6 +265,11 @@ const Dashboard = () => {
             {/* Comparison Section */}
             <div ref={comparisonRef} style={{ marginTop: '2rem', padding: '1rem 0' }}>
                 <ComparisonView jobIds={comparisonList} />
+            </div>
+
+            {/* Simulation Section */}
+            <div style={{ marginTop: '4rem', padding: '2rem 0', borderTop: '1px solid var(--border)' }}>
+                <SimulationWizard jobs={jobs} />
             </div>
         </div>
     );

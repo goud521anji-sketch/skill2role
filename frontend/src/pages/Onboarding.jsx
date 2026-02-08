@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import profileService from '../services/profileService';
 
 const Onboarding = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState(profileService.getProfile() || {
         education: {
             level: '',
             status: '',
@@ -14,8 +15,8 @@ const Onboarding = () => {
             tier: '',
             year: ''
         },
-        skills: [], // [{name: 'Python', proficiency: 4, interest: 'High'}]
-        interests: [], // ['Technology', 'Design']
+        skills: [],
+        interests: [],
         behavioral: {
             pace: 'Balanced',
             risk: 'Moderate',
@@ -25,12 +26,25 @@ const Onboarding = () => {
         }
     });
 
+    const isStepValid = () => {
+        if (step === 1) return formData.education.level && formData.education.field;
+        if (step === 2) return formData.skills.length > 0;
+        return true;
+    };
+
     const handleNext = async () => {
+        if (!isStepValid()) return;
+
         if (step < 3) {
             setStep(step + 1);
         } else {
             console.log("Submitting Profile...", formData);
             localStorage.setItem('userProfile', JSON.stringify(formData));
+            // Double check strict mode compliance
+            if (formData.skills.length === 0) {
+                alert("Please add at least one skill!");
+                return;
+            }
             navigate('/dashboard');
         }
     };
@@ -372,13 +386,16 @@ const Onboarding = () => {
                 )}
                 <button
                     onClick={handleNext}
+                    disabled={!isStepValid()}
                     style={{
-                        background: 'linear-gradient(135deg, var(--primary) 0%, #a855f7 100%)',
-                        color: 'white', padding: '0.8rem 2.5rem',
+                        background: isStepValid() ? 'linear-gradient(135deg, var(--primary) 0%, #a855f7 100%)' : 'var(--border)',
+                        color: isStepValid() ? 'white' : 'var(--text-muted)',
+                        padding: '0.8rem 2.5rem',
                         border: 'none', borderRadius: '2rem',
                         fontWeight: 'bold', fontSize: '1.1rem',
-                        boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
-                        cursor: 'pointer'
+                        boxShadow: isStepValid() ? '0 4px 12px rgba(99, 102, 241, 0.3)' : 'none',
+                        cursor: isStepValid() ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.3s'
                     }}
                 >
                     {step === 3 ? "Find My Career Matches" : "Continue"}

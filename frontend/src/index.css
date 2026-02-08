@@ -1,0 +1,36 @@
+:root {
+  --primary: #6366f1;
+  /* Indigo 500 */
+  --secondary: #ec4899;
+  /* Pink 500 */
+  --bg: #0f172a;
+  /* Slate 900 */
+  --card-bg: #1e293b;
+  /* Slate 800 */
+  --text: #f8fafc;
+  /* Slate 50 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+  --border: #334155;
+  /* Slate 700 */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.app-container {
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:active {
+  transform: scale(0.98);
+}
